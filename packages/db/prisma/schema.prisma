@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  graphs    Graph[]
+  createdAt DateTime @default(now())
+}
+
+model Graph {
+  id          String   @id @default(uuid())
+  title       String
+  description String?  @db.Text
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  nodes       Node[]
+  edges       Edge[]
+  
+  // Para el sistema de compartir y forking
+  isPublic    Boolean  @default(false)
+  forkedFrom  String?  // UUID From the original graph
+  version     Int      @default(1)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Node {
+  id        String  @id @default(uuid())
+  graphId   String
+  graph     Graph   @relation(fields: [graphId], references: [id], onDelete: Cascade)
+  
+  type      String  // 'bible-verse', 'pastor-note', 'reflection'
+  content   Json    // Store the bible reference or the text as JSON for flexibility
+  
+  // Coordinates for reactflow (frontend)
+  positionX Float
+  positionY Float
+  
+  @@index([graphId])
+}
+
+model Edge {
+  id        String @id @default(uuid())
+  graphId   String
+  graph     Graph  @relation(fields: [graphId], references: [id], onDelete: Cascade)
+  
+  source    String // UUID original node
+  target    String // UUID destination node
+  
+  label     String? // Optional: description of the connection
+  
+  @@index([graphId])
+}

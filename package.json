@@ -1,0 +1,19 @@
+{
+  "name": "cross-graph",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\""
+  },
+  "keywords": [],
+  "author": "Hector Lazcano Quintero Marmol",
+  "license": "ISC",
+  "packageManager": "pnpm@10.29.3",
+  "devDependencies": {
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.1",
+    "turbo": "^2.8.9"
+  }
+}
