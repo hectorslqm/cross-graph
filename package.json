@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\""
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
+    "db:generate": "pnpm --filter @repo/db exec prisma generate",
+    "db:migrate": "pnpm --filter @repo/db exec prisma migrate dev",
+    "db:seed": "pnpm --filter @repo/db exec prisma db seed"
   },
   "keywords": [],
   "author": "Hector Lazcano Quintero Marmol",

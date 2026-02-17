@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cross Graph Web (Frontend)
 
-## Getting Started
+The interactive visualization platform for **cross-graph**, built with **Next.js 16** and **React Flow**.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **React Flow**: Powering the sermon graph visualizations.
+- **Zustand**: Managing global graph state and node positions.
+- **Supabase SSR**: Authentication and session management using the latest SSR package.
+- **shadcn/ui**: Accessible and consistent UI components.
+- **Tailwind CSS**: Utility-first styling.
+- **@repo/types**: Shared Zod schemas for data integrity.
+
+## Environment Variables
+
+Create a `.env.local` file in this folder. These are required for both Authentication and API communication:
+
+```env
+# API Connection
+NEXT_PUBLIC_API_URL="http://localhost:3001"
+
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL="your-supabase-project-url"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Authentication Architecture
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project uses Supabase SSR with the following structure:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `utils/supabase/client.ts`: For Client Components (`use client`).
+- `utils/supabase/server.ts`: For Server Components and Server Actions.
+- `utils/supabase/middleware.ts`: Handles automatic session refreshing.
 
-## Learn More
+## Running locally
 
-To learn more about Next.js, take a look at the following resources:
+1. Install dependencies:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+// From the root of the monorepo
+pnpm install
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Run the frontend:
 
-## Deploy on Vercel
+```bash
+pnpm dev --filter web
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Shared Packages
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This app relies on the following local workspace packages:
+`@repo/types`: Used for validating Graph and Verse data structures.
