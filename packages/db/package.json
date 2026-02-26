@@ -2,9 +2,12 @@
   "name": "@repo/db",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./index.ts",
+  "types": "./index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "generate": "prisma generate"
   },
   "keywords": [],
   "private": true,
@@ -12,10 +15,12 @@
   "license": "ISC",
   "packageManager": "pnpm@10.29.3",
   "dependencies": {
-    "@prisma/client": "latest"
+    "@prisma/client": "^7.4.0",
+    "@prisma/config": "^7.4.1"
   },
   "devDependencies": {
-    "@prisma/client": "^7.4.0",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^25.3.1",
     "prisma": "^7.4.0"
   }
 }

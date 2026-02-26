@@ -42,8 +42,11 @@ pnpm install
 
 This project uses **pnpm** workspaces and **Turborepo** for efficient monorepo management. To get started, follow these steps:
 
-1. Set up the environment variables for both the `api` and `web` apps.
-2. Running the project
+1. Infrastructure & DB: Follow the Local [Infrastructure section](#local-infrastructure-supabase--docker) to start Supabase and sync your database.
+
+2. Environment Variables: Set up your .env files as described in the [Environment Variables section](#environment-variables).
+
+3. Running the project
    - To run both the backend and frontend concurrently:
      ```bash
      pnpm dev
@@ -57,7 +60,7 @@ This project uses **pnpm** workspaces and **Turborepo** for efficient monorepo m
      pnpm dev --filter web
      ```
 
-3. Verification and Building (Build)
+4. Verification and Building (Build)
    It is highly recommended to run the build command periodically to ensure there are no TypeScript errors or dependency mismatches before major commits.
 
 Build Entire Project:
@@ -80,21 +83,59 @@ Essential to verify dependency injection, module consistency, and @repo/db integ
 pnpm build --filter api
 ```
 
-4. Database (Prisma)
-   Note: Connection code in PrismaService is currently commented out until Docker setup is complete.
-   To generate the Prisma client once the database is live:
+## Local Infrastructure (Supabase & Docker)
 
-```Bash
-pnpm db:generate
+We use **Supabase CLI** to manage our local development environment. This provides a local PostgreSQL instance, Auth, and Storage services running on Docker.
+
+### 1. Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) must be running.
+- [Supabase CLI](https://supabase.com/docs/guides/cli) installed (`pnpm add -g supabase`).
+
+### 2. Service Initialization
+
+To start the local backend, run:
+
+```bash
+npx supabase start
 ```
 
-## Roadmap: Docker Integration
+This command will output your local API URL, anon key, and DB URL. Keep these handy for the .env setup.
 
-We are planning to integrate Docker Compose to streamline the local environment:
+3. Database Sync (Prisma 7)
+   Once Supabase is running, sync your Prisma schema with the local Postgres instance:
 
-- Local **PostgreSQL** instance.
-- **PgAdmin** for visual data management.
-- Containerized development environment.
+```bash
+pnpm --filter @repo/db db:push
+```
+
+This will apply your Prisma schema to the local database without generating a migration, which is ideal for rapid development.
+
+## Environment Variables
+
+Each application requires specific environment variables. Do not share your keys. Each collaborator generates their own by running `supabase start`.
+
+To set up your local environment for the first time, copy the templates and fill in the values:
+
+1. Frontend (.env.local):
+
+```bash
+cp apps/web/.env.example apps/web/.env.local
+```
+
+2. Backend (.env):
+
+```bash
+cp apps/api/.env.example apps/api/.env
+```
+
+3. Database (Prisma)
+
+```bash
+cp packages/db/.env.example packages/db/.env
+```
+
+> If you modify the project and a new environment variable is required, you must update the corresponding .env.example template to keep the repository's configuration up to date for all collaborators.
 
 ---
 
